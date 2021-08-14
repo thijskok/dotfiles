@@ -1,5 +1,7 @@
 #!/bin/bash
 
+system_type=$(uname -s)
+
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
   echo "Installing Oh My Zsh"
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -8,7 +10,17 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
   curl -fsSL https://raw.githubusercontent.com/thijskok/zsh-theme/master/mnml.zsh-theme -o "$HOME/.oh-my-zsh/themes/mnml.zsh-theme"
   sed -i -e '/ZSH_THEME=/s/=.*/="mnml"`/' ~/.zshrc
 
+  if [ "$system_type" == "Linux"]; then
+    if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
+      echo "Installing ZSH autosuggestions"  
+      git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+      sed -i 's/\(^plugins=([^)]*\)/\1 zsh-autosuggestions/' ~/.zshrc 
+    fi
+  fi
+
   echo "Adding aliases"
   echo "alias art='php artisan'" >> ~/.zshrc
   echo "alias phpunit='vendor/bin/phpunit'" >> ~/.zshrc
 fi
+
+
