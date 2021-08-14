@@ -194,7 +194,9 @@ let g:tagbar_compact = 2    " Don't show the short help
 
 let g:airline_powerline_fonts = 1
 
-colorscheme nord
+if filereadable(expand("~/.vim/plugged/nord-vim/colors/nord.vim"))
+  colorscheme nord
+endif
 
 " ================ Tweaks ============================
 
