@@ -1,0 +1,11 @@
+#!/bin/bash
+
+system_type=$(uname -s)
+
+# APT
+
+if [ "$system_type" = "Linux" ]; then
+
+  echo "Installing packages"  
+  sudo apt-get -y install ctags curl git nodejs vim wget zsh 
+fi
