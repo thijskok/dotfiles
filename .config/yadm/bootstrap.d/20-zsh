@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+  echo "Installing Oh My Zsh"
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+  echo "Installing MNML theme"
+  curl -fsSL https://raw.githubusercontent.com/thijskok/zsh-theme/master/mnml.zsh-theme -o "$HOME/.oh-my-zsh/themes/mnml.zsh-theme"
+  sed -i -e '/ZSH_THEME=/s/=.*/="mnml"`/' ~/.zshrc
+
+  echo "Adding aliases"
+  echo "alias art='php artisan'" >> ~/.zshrc
+  echo "alias phpunit='vendor/bin/phpunit'" >> ~/.zshrc
+fi
