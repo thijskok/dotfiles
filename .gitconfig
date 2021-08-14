@@ -1,0 +1,22 @@
+[credential]
+	helper = cache
+[push]
+	default = simple
+[alias]
+	cm = checkout master
+	nah = !git reset --hard && git clean -df
+	amend = commit --amend --no-edit
+	upstream = remote add upstream
+	updatefork = !git fetch upstream && git rebase upstream/master
+	personal = !git config user.name \"Thijs Kok\" && git config user.email \"mail@thijskok.nl\"
+	work = !git config user.name \"Thijs Kok\" && git config user.email \"tkok@testmonitor.com\"
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[user]
+	name = Thijs Kok
+	email = mail@thijskok.nl
+[init]
+	defaultBranch = main
