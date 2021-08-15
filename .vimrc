@@ -117,7 +117,7 @@ set wildignore+=log/**
 set wildignore+=tmp/**
 set wildignore+=*.png,*.jpg,*.gif
 
-set pumheight=10
+set pumheight=20
 
 " ================ Indentation ======================
 
