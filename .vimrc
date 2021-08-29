@@ -21,6 +21,7 @@ set belloff=all                 " Turns off Bell
 set encoding=UTF-8              " Set character encoding
 set lazyredraw                  " Redraw only when we need to
 set termguicolors               " Enable 256 color mode
+set signcolumn=yes              " Reserve space for signs in the gutter
 
 " This makes vim act like all other editors, buffers can
 " exist in the background without being in a window.
