@@ -9,7 +9,8 @@ endif
 
 " ================ General Config ====================
 
-set number                      " Line numbers are good
+set number relativenumber       " Use relative line numbers
+set nu rnu                      " Use hybrid line number mode
 set backspace=indent,eol,start  " Allow backspace in insert mode
 set history=1000                " Store lots of :cmdline history
 set showcmd                     " Show incomplete cmds down the bottom
