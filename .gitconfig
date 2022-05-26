@@ -3,11 +3,17 @@
 [push]
 	default = simple
 [alias]
-	cm = checkout master
-	nah = !git reset --hard && git clean -df
 	amend = commit --amend --no-edit
-	upstream = remote add upstream
+	branch = checkout -b
+	cleanup = !git branch --merged | egrep -v "(^\*|master|main|dev)" | xargs git branch -d
+	main = checkout main
+	master = checkout master
+	nah = !git reset --hard && git clean -df
+	unstage = reset --soft HEAD^
 	updatefork = !git fetch upstream && git rebase upstream/master
+	upstream = remote add upstream
+	wip = !git add --all && git commit -m 'WIP'
+	
 	personal = !git config user.name \"Thijs Kok\" && git config user.email \"mail@thijskok.nl\"
 	work = !git config user.name \"Thijs Kok\" && git config user.email \"tkok@testmonitor.com\"
 [filter "lfs"]
