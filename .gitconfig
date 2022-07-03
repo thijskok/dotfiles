@@ -5,7 +5,7 @@
 [alias]
 	amend = commit --amend --no-edit
 	branch = checkout -b
-	cleanup = !git branch --merged | egrep -v "(^\*|master|main|dev)" | xargs git branch -d
+	cleanup = !git branch --merged | egrep -v \"(^\\*|master|main|dev)\" | xargs git branch -d
 	main = checkout main
 	master = checkout master
 	nah = !git reset --hard && git clean -df
