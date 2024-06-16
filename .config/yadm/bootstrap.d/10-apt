@@ -6,6 +6,6 @@ system_type=$(uname -s)
 
 if [ "$system_type" = "Linux" ]; then
 
-  echo "Installing packages"  
-  sudo apt-get -y install universal-ctags curl git nodejs vim wget zsh zsh-autosuggestions
+  echo "Installing packages"
+  sudo apt-get -y install curl git nodejs neovim wget zsh zsh-autosuggestions
 fi
