@@ -1,0 +1,153 @@
+#!/usr/bin/env bash
+#
+# Append locally-installed Homebrew packages that are missing from the Brewfile.
+#
+# Compares `brew leaves` and `brew list --cask` against the entries in
+# config/homebrew/Brewfile and appends any missing entries as a dated block.
+
+set -e
+
+BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+BREWFILE="${BASEDIR}/config/homebrew/Brewfile"
+
+if [ ! -f "${BREWFILE}" ]; then
+    echo "Brewfile not found at ${BREWFILE}" >&2
+    exit 1
+fi
+
+if ! command -v brew >/dev/null 2>&1; then
+    echo "brew is not installed, skipping sync"
+    exit 0
+fi
+
+echo "==> Checking Brewfile against installed packages"
+
+# Extract names from Brewfile. Match: brew 'name' / brew "name" (same for cask).
+# For tap-prefixed entries like brew 'jordond/tap/jolt' we keep both the full
+# string and the basename so either form deduplicates correctly.
+listed_brews=$(
+    grep -E "^[[:space:]]*brew[[:space:]]+['\"]" "${BREWFILE}" \
+        | sed -E "s/^[[:space:]]*brew[[:space:]]+['\"]([^'\"]+)['\"].*$/\1/" \
+        | awk -F/ '{print $0; print $NF}' \
+        | sort -u
+)
+listed_casks=$(
+    grep -E "^[[:space:]]*cask[[:space:]]+['\"]" "${BREWFILE}" \
+        | sed -E "s/^[[:space:]]*cask[[:space:]]+['\"]([^'\"]+)['\"].*$/\1/" \
+        | awk -F/ '{print $0; print $NF}' \
+        | sort -u
+)
+# mas entries are pinned by App Store ID, e.g. `mas 'Things', id: 904280696`.
+listed_mas=$(
+    grep -E "^[[:space:]]*mas[[:space:]]+['\"]" "${BREWFILE}" \
+        | sed -E "s/^[[:space:]]*mas[[:space:]]+['\"][^'\"]+['\"][[:space:]]*,[[:space:]]*id:[[:space:]]*([0-9]+).*$/\1/" \
+        | sort -u
+)
+
+installed_brews=$(brew leaves | sort -u)
+installed_casks=$(brew list --cask 2>/dev/null | sort -u || true)
+
+# `mas list` emits: "<id>  <Name>  (<version>)" — split into "<id>|<Name>".
+if command -v mas >/dev/null 2>&1; then
+    # IDs are right-aligned by `mas list`, so shorter ones have leading spaces.
+    installed_mas=$(mas list 2>/dev/null | sed -E 's/^[[:space:]]*([0-9]+)[[:space:]]+(.+[^[:space:]])[[:space:]]+\([^)]+\)[[:space:]]*$/\1|\2/' | sort -u || true)
+else
+    installed_mas=""
+fi
+installed_mas_ids=$(echo "${installed_mas}" | awk -F'|' 'NF{print $1}' | sort -u)
+
+missing_brews=$(comm -23 <(echo "${installed_brews}") <(echo "${listed_brews}"))
+missing_casks=$(comm -23 <(echo "${installed_casks}") <(echo "${listed_casks}"))
+missing_mas_ids=$(comm -23 <(echo "${installed_mas_ids}") <(echo "${listed_mas}"))
+
+# Drop empty lines
+missing_brews=$(echo "${missing_brews}" | grep -v "^$" || true)
+missing_casks=$(echo "${missing_casks}" | grep -v "^$" || true)
+missing_mas_ids=$(echo "${missing_mas_ids}" | grep -v "^$" || true)
+
+# `brew list`/`brew leaves` still report a renamed formula/cask under its old
+# name, which would otherwise look "missing" even though it's tracked under
+# the new name. Resolve each candidate to its current name before keeping it.
+resolve_name() {
+    local kind="$1" name="$2" field="full_name"
+    [ "${kind}" = "cask" ] && field="token"
+    brew info "--${kind}" "${name}" --json=v2 2>/dev/null \
+        | grep -o "\"${field}\"[[:space:]]*:[[:space:]]*\"[^\"]*\"" \
+        | head -1 \
+        | sed -E 's/.*:[[:space:]]*"([^"]*)"$/\1/'
+}
+
+resolve_missing() {
+    local kind="$1" listed="$2" candidates="$3"
+    local name canonical seen=""
+    while IFS= read -r name; do
+        [ -z "${name}" ] && continue
+        canonical=$(resolve_name "${kind}" "${name}")
+        [ -z "${canonical}" ] && canonical="${name}"
+        grep -qxF "${canonical}" <<< "${listed}" && continue
+        grep -qxF "${canonical}" <<< "${seen}" && continue
+        seen="${seen}${canonical}"$'\n'
+        echo "${canonical}"
+    done <<< "${candidates}"
+}
+
+missing_brews=$(resolve_missing brew "${listed_brews}" "${missing_brews}")
+missing_casks=$(resolve_missing cask "${listed_casks}" "${missing_casks}")
+
+if [ -z "${missing_brews}" ] && [ -z "${missing_casks}" ] && [ -z "${missing_mas_ids}" ]; then
+    echo "==> Brewfile is up to date, nothing to sync"
+    exit 0
+fi
+
+today=$(date +%Y-%m-%d)
+
+# Ensure a blank line separates the new block from any prior content
+if [ -s "${BREWFILE}" ] && [ "$(tail -c 1 "${BREWFILE}")" != "" ]; then
+    echo "" >> "${BREWFILE}"
+fi
+
+{
+    echo ""
+    echo "# Added by brewfile-sync on ${today}"
+    if [ -n "${missing_brews}" ]; then
+        while IFS= read -r pkg; do
+            echo "brew \"${pkg}\""
+        done <<< "${missing_brews}"
+    fi
+    if [ -n "${missing_casks}" ]; then
+        while IFS= read -r pkg; do
+            echo "cask \"${pkg}\""
+        done <<< "${missing_casks}"
+    fi
+    if [ -n "${missing_mas_ids}" ]; then
+        while IFS= read -r id; do
+            name=$(echo "${installed_mas}" | awk -F'|' -v id="${id}" '$1==id {print $2; exit}')
+            echo "mas \"${name}\", id: ${id}"
+        done <<< "${missing_mas_ids}"
+    fi
+} >> "${BREWFILE}"
+
+count_brews=$([ -z "${missing_brews}" ] && echo 0 || echo "${missing_brews}" | wc -l | tr -d ' ')
+count_casks=$([ -z "${missing_casks}" ] && echo 0 || echo "${missing_casks}" | wc -l | tr -d ' ')
+count_mas=$([ -z "${missing_mas_ids}" ] && echo 0 || echo "${missing_mas_ids}" | wc -l | tr -d ' ')
+
+echo "==> Appended ${count_brews} brew(s), ${count_casks} cask(s), and ${count_mas} mas app(s) to Brewfile"
+
+if [ -n "${missing_brews}" ]; then
+    echo ""
+    echo "New brews:"
+    echo "${missing_brews}" | sed 's/^/  /'
+fi
+if [ -n "${missing_casks}" ]; then
+    echo ""
+    echo "New casks:"
+    echo "${missing_casks}" | sed 's/^/  /'
+fi
+if [ -n "${missing_mas_ids}" ]; then
+    echo ""
+    echo "New mas apps:"
+    while IFS= read -r id; do
+        name=$(echo "${installed_mas}" | awk -F'|' -v id="${id}" '$1==id {print $2; exit}')
+        echo "  ${name} (${id})"
+    done <<< "${missing_mas_ids}"
+fi

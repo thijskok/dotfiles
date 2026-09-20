@@ -1,0 +1,271 @@
+tap "nicoverbruggen/cask", trusted: true
+tap "shivammathur/extensions", trusted: true
+tap "shivammathur/php", trusted: true
+tap "stripe/stripe-cli", trusted: true
+tap "stripe/stripe-mock", trusted: true
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@3"
+# Automatic configure script builder
+brew "autoconf"
+# Collection of over 500 reusable autoconf macros
+brew "autoconf-archive"
+# Tool for generating GNU Standards-compliant Makefiles
+brew "automake"
+# Library for command-line editing
+brew "readline"
+# Official Amazon AWS command-line interface
+brew "awscli"
+# Parser generator
+brew "bison"
+# Asynchronous DNS library
+brew "c-ares"
+# Perl compatible regular expressions library with a new API
+brew "pcre2"
+# Core application library for C
+brew "glib"
+# Object-file caching compiler wrapper
+brew "ccache"
+# Rootkit detector
+brew "chkrootkit"
+# Anti-virus software
+brew "clamav"
+# Statistics utility to count lines of code
+brew "cloc"
+# Cloudflare Tunnel client (formerly Argo Tunnel)
+brew "cloudflared"
+# Cross-platform make
+brew "cmake"
+# Container runtimes on MacOS (and Linux) with minimal setup
+brew "colima", restart_service: :changed
+# Libraries to talk to Microsoft SQL Server and Sybase databases
+brew "freetds"
+# TIFF library and utilities
+brew "libtiff"
+# General-purpose scripting language
+brew "php", restart_service: :changed, link: false
+# Dependency Manager for PHP
+brew "composer"
+# Reimplementation of ctags(1)
+brew "ctags"
+# Lightweight DNS forwarder and DHCP server
+brew "dnsmasq"
+# Pack, ship and run any application as a lightweight container
+brew "docker"
+# Isolated development environments using Docker
+brew "docker-compose"
+# Platform keystore credential helper for Docker
+brew "docker-credential-helper"
+# Command-line tool for DigitalOcean
+brew "doctl"
+# Like neofetch, but much faster because written mostly in C
+brew "fastfetch"
+# Zip password cracker
+brew "fcrackzip"
+# Play, record, convert, and stream select audio and video codecs
+brew "ffmpeg"
+# GNU database manager
+brew "gdbm"
+# GitHub command-line tool
+brew "gh"
+# Distributed revision control system
+brew "git"
+# Syntax-highlighting pager for git and diff output
+brew "git-delta"
+# Simple and efficient way to access statistics in git
+brew "git-quick-stats"
+# Compute various size metrics for a Git repository
+brew "git-sizer"
+# GNU Privacy Guard (OpenPGP)
+brew "gnupg"
+# Open source programming language to build simple/reliable/efficient software
+brew "go"
+# GNU grep, egrep and fgrep
+brew "grep"
+# OpenType text shaping engine
+brew "harfbuzz"
+# Open-source video transcoder available for Linux, Mac, and Windows
+brew "handbrake"
+# World's fastest and most advanced password recovery utility
+brew "hashcat"
+# Improved top (interactive process viewer)
+brew "htop"
+# Tool to measure maximum TCP and UDP bandwidth
+brew "iperf"
+# Update of iperf: measures TCP, UDP, and SCTP bandwidth
+brew "iperf3"
+# Portable Foreign Function Interface library
+brew "libffi"
+# ISO/IEC 23008-12:2017 HEIF file format decoder and encoder
+brew "libheif"
+# Very small, very fast data compression library
+brew "liblzf"
+# YAML Parser
+brew "libyaml"
+# Mac App Store command-line interface
+brew "mas"
+# Java-based project management
+brew "maven"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.13"
+# Terminal-based visual file manager
+brew "midnight-commander"
+# Open source relational database management system
+brew "mysql@8.4", restart_service: :changed, link: true
+# Increase performance and stability of a MySQL installation
+brew "mysqltuner"
+# NCurses Disk Usage
+brew "ncdu"
+# Ambitious Vim-fork focused on extensibility and agility
+brew "neovim"
+# HTTP(S) server and reverse proxy, and IMAP/POP3 proxy server
+brew "nginx"
+# Web server scanner
+brew "nikto"
+# Port scanning utility for large networks
+brew "nmap"
+# Manage multiple Node.js versions
+brew "nvm"
+# Check coding standards in PHP, JavaScript and CSS
+brew "php-code-sniffer"
+# Tool to automatically fix PHP coding standards issues
+brew "php-cs-fixer"
+# General-purpose scripting language
+brew "php@8.4", link: true
+# Package compiler and linker metadata toolkit
+brew "pkgconf"
+# Python package management tool
+brew "poetry"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.11"
+# Persistent key-value database, with built-in net interface
+brew "redis", restart_service: :changed
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# User interface to the TELNET protocol
+brew "telnet"
+# Terminal multiplexer
+brew "tmux"
+# Executes a program periodically, showing output fullscreen
+brew "watch"
+# Internet file retriever
+brew "wget"
+# JavaScript package manager
+brew "yarn"
+# UNIX shell (command interpreter)
+brew "zsh"
+# PCOV PHP extension
+brew "shivammathur/extensions/pcov@8.4"
+# Redis PHP extension
+brew "shivammathur/extensions/phpredis@8.4"
+# Stripe CLI utility
+brew "stripe/stripe-cli/stripe"
+# Password manager that keeps all passwords secure behind one password
+cask "1password"
+# Web browser focusing on privacy
+cask "brave-browser"
+# Utility that prevents the system from going to sleep
+cask "caffeine"
+# Presentations from Markdown
+cask "deckset"
+# Voice and text chat software
+cask "discord"
+# Eclipse IDE for Java developers
+cask "eclipse-java"
+cask "font-atkynson-mono-nerd-font"
+cask "font-bitstream-vera-sans-mono-nerd-font"
+cask "font-cascadia-code"
+cask "font-dejavu-sans-mono-for-powerline"
+cask "font-dejavu-sans-mono-nerd-font"
+cask "font-fira-code"
+cask "font-fira-code-nerd-font"
+cask "font-fira-mono-nerd-font"
+cask "font-hack"
+cask "font-hasklig"
+cask "font-heebo"
+cask "font-inter"
+cask "font-jetbrains-mono"
+cask "font-monoid"
+cask "font-montserrat"
+cask "font-nunito"
+cask "font-open-sans"
+cask "font-plus-jakarta-sans"
+cask "font-poppins"
+cask "font-roboto"
+cask "font-victor-mono"
+# Terminal emulator that uses platform-native UI and GPU acceleration
+cask "ghostty"
+# Desktop client for GitHub repositories
+cask "github"
+# Web browser
+cask "google-chrome"
+# Open-source video transcoder
+cask "handbrake-app"
+# Homebrew's official GUI
+cask "homebrew-app"
+# Blocks all Keyboard and TouchBar input
+cask "keyboardcleantool"
+# Utility that shows the latest app updates
+cask "latest"
+# Multi-platform web browser
+cask "microsoft-edge"
+# Tool to control external monitor brightness & volume
+cask "monitorcontrol"
+# Reverse proxy, secure introspectable tunnels to localhost
+cask "ngrok"
+# JDK from Oracle
+cask "oracle-jdk"
+# Utility to uninstall apps and remove leftover files from old/uninstalled apps
+cask "pearcleaner"
+# Collaboration platform for API development
+cask "postman"
+# Screen recording and video editing software
+cask "screenflow"
+# Remote desktop software
+cask "screens-connect"
+# Music streaming service
+cask "spotify"
+# Native GUI tool for relational databases
+cask "tableplus"
+# Google Chromium, sans integration with Google
+cask "ungoogled-chromium"
+# Virtual machines UI using QEMU
+cask "utm"
+# OpenVPN client with AppleScript support
+cask "viscosity"
+# Open-source code editor
+cask "visual-studio-code"
+# Multimedia player
+cask "vlc"
+# Video communication and virtual meeting platform
+cask "zoom"
+mas "1Password for Safari", id: 1569813296
+mas "AdGuard Mini", id: 1440147259
+mas "Affinity Designer 2", id: 1616831348
+mas "Affinity Photo 2", id: 1616822987
+mas "Affinity Publisher 2", id: 1606941598
+mas "Bear", id: 1091189122
+mas "ColorSlurp", id: 1287239339
+mas "Consent-O-Matic", id: 1606897889
+mas "Folder Preview", id: 6698876601
+mas "GarageBand", id: 682658836
+mas "Gifski", id: 1351639930
+mas "iA Writer", id: 775737590
+mas "iMovie", id: 408981434
+mas "Infuse", id: 1136220934
+mas "Keynote", id: 361285480
+mas "Microsoft Excel", id: 462058435
+mas "Microsoft Outlook", id: 985367838
+mas "Microsoft PowerPoint", id: 462062816
+mas "Microsoft Word", id: 462054704
+mas "News Explorer", id: 1032670789
+mas "Numbers", id: 361304891
+mas "Pages", id: 361309726
+mas "Parachute Backup", id: 6748614170
+mas "Paste", id: 967805235
+mas "Pixelmator Pro", id: 1289583905
+mas "Slack", id: 803453959
+mas "Surfshark", id: 1437809329
+mas "The Unarchiver", id: 425424353
+mas "Things", id: 904280696
+mas "Windows App", id: 1295203466
+mas "Xcode", id: 497799835

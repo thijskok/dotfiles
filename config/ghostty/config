@@ -1,0 +1,33 @@
+# theme = NightOwlDark
+
+window-padding-x = 10
+window-padding-y = 4
+window-width = 120
+window-height = 45
+
+font-size = 15
+font-family = Hack
+font-thicken = false
+
+adjust-cell-width = -3%
+adjust-underline-position = 40%
+adjust-underline-thickness = -60%
+
+background-opacity = 0.95
+background-blur = 90
+background-opacity-cells = true
+
+cursor-style = block
+cursor-style-blink = true
+
+copy-on-select = clipboard
+
+link-url = true
+link-previews = true
+
+shell-integration = zsh
+shell-integration-features = no-cursor,sudo,ssh-env
+
+macos-non-native-fullscreen = true
+macos-titlebar-style = tabs
+keybind = shift+enter=text:\n

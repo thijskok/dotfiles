@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+#
+# Bootstrap a fresh machine (macOS or Linux):
+#   1. Install packages (Homebrew on macOS, apt on Linux)
+#   2. Install oh-my-zsh
+#   3. Set zsh as the default shell
+#   4. Run bin/install to symlink dotfiles
+#   5. Apply macOS defaults (macOS only)
+
+set -e
+
+BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "${BASEDIR}"
+
+OS="$(uname -s)"
+
+echo "==> Installing packages"
+case "${OS}" in
+  Darwin)
+    if ! command -v brew &>/dev/null; then
+      echo "==> Installing Homebrew"
+      NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      # Homebrew isn't on PATH yet in this shell (that normally happens via
+      # ~/.zprofile, which isn't symlinked in until bin/install runs below).
+      if [ -x /opt/homebrew/bin/brew ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+      else
+        eval "$(/usr/local/bin/brew shellenv)"
+      fi
+    fi
+    brew bundle --file="config/homebrew/Brewfile"
+    ;;
+  Linux)
+    sudo apt-get update
+    grep -vE '^\s*(#|$)' config/apt/packages.txt | xargs sudo apt-get install -y
+    ;;
+  *)
+    echo "Unsupported OS: ${OS}" >&2
+    exit 1
+    ;;
+esac
+
+if [ ! -d "${HOME}/.oh-my-zsh" ]; then
+  echo "==> Installing oh-my-zsh"
+  # RUNZSH=no: don't drop into zsh when the installer finishes, let this script keep running.
+  # CHSH=no: we set the default shell ourselves below, after zsh is guaranteed to be installed.
+  # KEEP_ZSHRC=yes: don't overwrite ~/.zshrc, bin/install symlinks our own version afterwards anyway.
+  RUNZSH=no CHSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+else
+  echo "==> oh-my-zsh already installed, skipping"
+fi
+
+echo "==> Installing zsh-autosuggestions"
+# Installed the same way on both platforms: oh-my-zsh's plugin loader expects
+# it under $ZSH_CUSTOM/plugins, which neither brew nor apt places it in.
+ZSH_CUSTOM="${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}"
+if [ ! -d "${ZSH_CUSTOM}/plugins/zsh-autosuggestions" ]; then
+  git clone https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM}/plugins/zsh-autosuggestions"
+else
+  echo "==> zsh-autosuggestions already installed, skipping"
+fi
+
+echo "==> Setting zsh as the default shell"
+ZSH_PATH="$(command -v zsh)"
+# Homebrew's zsh isn't in /etc/shells by default; chsh refuses any shell that isn't listed there.
+grep -qxF "${ZSH_PATH}" /etc/shells || echo "${ZSH_PATH}" | sudo tee -a /etc/shells >/dev/null
+if [ "${SHELL}" != "${ZSH_PATH}" ]; then
+  chsh -s "${ZSH_PATH}"
+else
+  echo "==> zsh is already the default shell, skipping"
+fi
+
+echo "==> Symlinking dotfiles"
+bin/install
+
+if [ "${OS}" = "Darwin" ]; then
+  echo "==> Applying macOS defaults"
+  bin/macos-defaults
+fi
+
+echo "==> Done"

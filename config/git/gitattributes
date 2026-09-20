@@ -1,0 +1,4 @@
+*.jpg  binary -delta
+*.png  binary -delta
+*.gz  binary -delta
+*.bz2  binary -delta

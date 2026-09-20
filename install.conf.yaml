@@ -1,0 +1,27 @@
+- clean: ['~']
+
+- create:
+    - ~/Developer
+    - ~/.composer
+
+- link:
+    ~/.gitconfig: config/git/gitconfig
+    ~/.gitattributes: config/git/gitattributes
+    ~/.gitignore_global: config/git/gitignore
+
+    ~/.zprofile: config/zsh/zprofile
+    ~/.zshrc: config/zsh/zshrc
+    ~/.composer/composer.json: config/composer/composer.json
+
+    ~/.claude/CLAUDE.md: config/claude/CLAUDE.md
+    ~/.claude/settings.json: config/claude/settings.json
+    ~/.claude/skills: config/claude/skills
+
+    ~/.config/ghostty/config: config/ghostty/config
+    ~/.config/ghostty/themes: config/ghostty/themes
+
+    ~/.oh-my-zsh/custom/themes: config/oh-my-zsh/themes
+
+- shell:
+    - [touch $HOME/.hushlogin]
+    - [git submodule update --init --recursive]

@@ -1,0 +1,8 @@
+# Minimal set of packages needed to bootstrap these dotfiles on Linux.
+# One package per line; add more the same way you'd add to the Brewfile.
+
+git
+curl
+zsh
+build-essential
+unzip

@@ -1,0 +1,8 @@
+{
+    "require": {
+        "laravel/valet": "^4.6",
+        "laravel/installer": "^5.14",
+        "styleci/cli": "^1.5",
+        "laravel/lsp": "^0.0.31"
+    }
+}

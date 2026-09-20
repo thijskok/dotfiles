@@ -1,0 +1,61 @@
+[user]
+	name = Thijs Kok
+	email = thijs.kok@cerios.com
+
+[github]
+    user = thijskok
+
+[init]
+	defaultBranch = main
+
+[core]
+    editor = vim
+    pager = delta
+    attributesfile = ~/.gitattributes
+    excludesfile = ~/.gitignore_global
+
+[credential]
+	helper = cache
+
+[push]
+	default = simple
+    autoSetupRemote = true
+
+[fetch]
+    prune = true
+
+[help]
+    autocorrect = 1
+
+[alias]
+    cleanup = !git branch --merged | egrep -v \"(^\\*|master|main|dev)\" | xargs git branch -d
+	cm = !git checkout "$(git config init.defaultBranch)"
+	nah = !git reset --hard && git clean -df
+	amend = commit --amend --no-edit
+	upstream = remote add upstream
+	updatefork = !git fetch upstream && git rebase upstream/master
+    wip = !git add --all && git commit -m 'WIP'
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[interactive]
+    diffFilter = delta --color-only --features=interactive
+
+[delta]
+    features = decorations
+
+[delta "interactive"]
+    keep-plus-minus-markers = false
+
+[delta "decorations"]
+    commit-decoration-style = blue ol
+    commit-style = raw
+    file-style = omit
+    hunk-header-decoration-style = blue box
+    hunk-header-file-style = red
+    hunk-header-line-number-style = "#067a00"
+    hunk-header-style = file line-number syntax

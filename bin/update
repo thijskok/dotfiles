@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+#
+# Update dotfiles and tools:
+#   1. Pull the latest dotfiles and re-run bin/install
+#   2. Update packages (Homebrew on macOS, apt on Linux)
+#   3. Sync the Brewfile with what's actually installed (macOS only)
+#   4. Update global npm/composer packages
+
+set -e
+
+BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "${BASEDIR}"
+
+echo "==> Pulling latest dotfiles"
+git pull origin main
+
+echo "==> Re-linking dotfiles"
+bin/install
+
+OS="$(uname -s)"
+
+echo "==> Updating packages"
+case "${OS}" in
+  Darwin)
+    brew update
+    brew upgrade
+    brew bundle --file="config/homebrew/Brewfile"
+    brew cleanup
+    echo "==> Syncing Brewfile with installed packages"
+    bin/brewfile-sync
+    ;;
+  Linux)
+    sudo apt-get update
+    sudo apt-get upgrade -y
+    grep -vE '^\s*(#|$)' config/apt/packages.txt | xargs sudo apt-get install -y
+    ;;
+  *)
+    echo "Unsupported OS: ${OS}" >&2
+    exit 1
+    ;;
+esac
+
+if command -v npm &>/dev/null; then
+  echo "==> Updating global npm packages"
+  npm update -g
+fi
+
+if command -v composer &>/dev/null; then
+  echo "==> Updating global composer packages"
+  composer global update
+fi
+
+echo "==> Done"
