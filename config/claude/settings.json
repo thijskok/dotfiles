@@ -89,5 +89,6 @@
   "effortLevel": "high",
   "fastMode": true,
   "theme": "dark",
-  "agentPushNotifEnabled": false
+  "agentPushNotifEnabled": false,
+  "model": "opus[1m]"
 }
