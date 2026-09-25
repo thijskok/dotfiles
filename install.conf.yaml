@@ -11,6 +11,9 @@
 
     ~/.zshenv: config/zsh/zshenv
     ~/.zshrc: config/zsh/zshrc
+    ~/.oh-my-zsh/custom/themes: config/oh-my-zsh/themes
+    ~/.tmux.conf: config/tmux/tmux.conf
+
     ~/.composer/composer.json: config/composer/composer.json
 
     ~/.claude/CLAUDE.md: config/claude/CLAUDE.md
@@ -19,8 +22,6 @@
 
     ~/.config/ghostty/config: config/ghostty/config
     ~/.config/ghostty/themes: config/ghostty/themes
-
-    ~/.oh-my-zsh/custom/themes: config/oh-my-zsh/themes
 
 - shell:
     - [touch $HOME/.hushlogin]

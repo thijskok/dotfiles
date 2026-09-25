@@ -31,3 +31,6 @@ shell-integration-features = no-cursor,sudo,ssh-env
 macos-non-native-fullscreen = true
 macos-titlebar-style = tabs
 keybind = shift+enter=text:\n
+# pass option+left/right through as real alt-arrow sequences (tmux pane switching)
+keybind = alt+arrow_left=unbind
+keybind = alt+arrow_right=unbind

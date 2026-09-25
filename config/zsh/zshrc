@@ -85,6 +85,10 @@ export LC_ALL=en_US.UTF-8
 # Preferred editor for local and remote sessions
 export EDITOR='nvim'
 
+# option+left/right to jump by word
+bindkey '^[[1;3D' backward-word
+bindkey '^[[1;3C' forward-word
+
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
