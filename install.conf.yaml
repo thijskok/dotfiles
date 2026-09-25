@@ -9,7 +9,7 @@
     ~/.gitattributes: config/git/gitattributes
     ~/.gitignore_global: config/git/gitignore
 
-    ~/.zprofile: config/zsh/zprofile
+    ~/.zshenv: config/zsh/zshenv
     ~/.zshrc: config/zsh/zshrc
     ~/.composer/composer.json: config/composer/composer.json
 
