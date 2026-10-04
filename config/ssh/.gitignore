@@ -1,0 +1,4 @@
+# Only the shared config is tracked; never commit keys or private hosts.
+*
+!.gitignore
+!config

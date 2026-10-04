@@ -14,6 +14,8 @@
     ~/.oh-my-zsh/custom/themes: config/oh-my-zsh/themes
     ~/.tmux.conf: config/tmux/tmux.conf
 
+    ~/.ssh/config: config/ssh/config
+
     ~/.composer/composer.json: config/composer/composer.json
 
     ~/.claude/CLAUDE.md: config/claude/CLAUDE.md

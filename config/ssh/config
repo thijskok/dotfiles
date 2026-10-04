@@ -1,0 +1,7 @@
+Include ~/.ssh/config.local
+
+Host *
+  IgnoreUnknown UseKeychain
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_ed25519
