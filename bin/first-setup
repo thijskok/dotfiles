@@ -17,6 +17,58 @@ OS="$(uname -s)"
 echo "==> Installing packages"
 case "${OS}" in
   Darwin)
+    echo "==> Checking Command Line Tools"
+    CLT_NEEDS_INSTALL=false
+
+    if ! xcode-select -p &>/dev/null; then
+      CLT_NEEDS_INSTALL=true
+    else
+      # Tools exist, but verify they're not outdated by checking if brew doctor would complain
+      # We do this by attempting to get the CLT version - if they're too old, this will fail
+      if ! pkgutil --pkg-info=com.apple.pkg.CLTools_Executables &>/dev/null; then
+        echo "==> Command Line Tools appear incomplete or outdated"
+        CLT_NEEDS_INSTALL=true
+      else
+        # Get macOS version and CLT version to check compatibility
+        MACOS_VERSION=$(sw_vers -productVersion | cut -d. -f1)
+        CLT_VERSION=$(pkgutil --pkg-info=com.apple.pkg.CLTools_Executables | awk '/version:/ {print $2}' | cut -d. -f1)
+
+        # If CLT major version doesn't match macOS major version, they're outdated
+        if [ "${CLT_VERSION}" != "${MACOS_VERSION}" ]; then
+          echo "==> Command Line Tools version (${CLT_VERSION}) doesn't match macOS version (${MACOS_VERSION})"
+          CLT_NEEDS_INSTALL=true
+        fi
+      fi
+    fi
+
+    if [ "${CLT_NEEDS_INSTALL}" = true ]; then
+      echo "==> Reinstalling Command Line Tools"
+      # Remove old tools first
+      if [ -d /Library/Developer/CommandLineTools ]; then
+        sudo rm -rf /Library/Developer/CommandLineTools
+      fi
+      # Trigger installation
+      sudo xcode-select --install
+      echo "==> Waiting for Command Line Tools installation to complete..."
+      echo "    (A GUI dialog should have appeared - please complete the installation)"
+      until xcode-select -p &>/dev/null; do
+        sleep 5
+      done
+
+      # Wait for tools to be fully functional (not just present)
+      echo "==> Waiting for Command Line Tools to be fully ready..."
+      until pkgutil --pkg-info=com.apple.pkg.CLTools_Executables &>/dev/null; do
+        sleep 5
+      done
+      echo "==> Command Line Tools installed"
+
+      # Accept the license
+      echo "==> Accepting Xcode license"
+      sudo xcodebuild -license accept
+    else
+      echo "==> Command Line Tools are up to date"
+    fi
+
     if ! command -v brew &>/dev/null; then
       echo "==> Installing Homebrew"
       NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
