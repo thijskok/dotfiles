@@ -61,8 +61,12 @@ brew "doctl"
 brew "fastfetch"
 # Zip password cracker
 brew "fcrackzip"
+# Simple, fast and user-friendly alternative to find
+brew "fd"
 # Play, record, convert, and stream select audio and video codecs
 brew "ffmpeg"
+# Command-line fuzzy finder written in Go
+brew "fzf"
 # GNU database manager
 brew "gdbm"
 # GitHub command-line tool
@@ -101,6 +105,8 @@ brew "libheif"
 brew "liblzf"
 # YAML Parser
 brew "libyaml"
+# Simple terminal UI for git commands
+brew "lazygit"
 # Mac App Store command-line interface
 brew "mas"
 # Java-based project management
