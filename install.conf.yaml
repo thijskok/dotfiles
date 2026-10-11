@@ -25,6 +25,8 @@
     ~/.config/ghostty/config: config/ghostty/config
     ~/.config/ghostty/themes: config/ghostty/themes
 
+    ~/.config/nvim: config/nvim
+
 - shell:
     - [touch $HOME/.hushlogin]
     - [git submodule update --init --recursive]
