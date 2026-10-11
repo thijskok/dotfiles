@@ -88,7 +88,7 @@ case "${OS}" in
         eval "$(/usr/local/bin/brew shellenv)"
       fi
     fi
-    brew bundle --file="config/homebrew/Brewfile"
+    brew bundle --file="config/homebrew/Brewfile" --verbose
     ;;
   Linux)
     sudo apt-get update
