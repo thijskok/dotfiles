@@ -60,6 +60,7 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "opus[1m]",
   "disableClaudeAiConnectors": true,
   "skillOverrides": {
     "simplify": "user-invocable-only",
@@ -88,7 +89,6 @@
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "fastMode": true,
-  "theme": "dark",
-  "agentPushNotifEnabled": false,
-  "model": "opus[1m]"
+  "theme": "auto",
+  "agentPushNotifEnabled": false
 }
