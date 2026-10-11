@@ -165,6 +165,8 @@ cask "1password"
 cask "brave-browser"
 # Utility that prevents the system from going to sleep
 cask "caffeine"
+# AI-powered coding assistant
+cask "claude-code"
 # Presentations from Markdown
 cask "deckset"
 # Voice and text chat software
