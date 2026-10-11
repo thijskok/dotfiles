@@ -6,3 +6,7 @@ debug
 foo.*
 *.log
 data
+
+# LazyVim auto-generated files
+lazy-lock.json
+lazyvim.json
